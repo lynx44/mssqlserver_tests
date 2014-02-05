@@ -43,13 +43,26 @@ describe 'mssqlserver_tests::backup_database' do
     expect(converge).to run_mssqlserver_backup_database(description).with({ :database => expected })
   end
 
-  it 'runs backup script on node' do
+  it 'runs backup script on node with default options' do
     database = 'test_database'
     destination = 'c:\test\test.bak'
 
     node.set['database'] = database
     node.set['destination'] = destination
-    expected = "BACKUP DATABASE [#{database}] TO  DISK = N'#{destination}' WITH NOFORMAT, INIT,  NAME = N'#{database}-Full Database Backup', SKIP, NOREWIND, NOUNLOAD,  STATS = 10
+    expected = "BACKUP DATABASE [#{database}] TO  DISK = N'#{destination}' WITH NAME = N'#{database}-Full Database Backup', NOFORMAT, INIT, SKIP, NOREWIND, NOUNLOAD, STATS = 10
+    GO"
+
+    expect(converge).to run_mssqlserver_sql_command('run backup script').with({ :database => 'master', :command => expected })
+  end
+
+  it 'runs backup script with default options' do
+    database = 'test_database'
+    destination = 'c:\test\test.bak'
+
+    node.set['database'] = database
+    node.set['destination'] = destination
+    node.set['with'] = ['COPYONLY']
+    expected = "BACKUP DATABASE [#{database}] TO  DISK = N'#{destination}' WITH NAME = N'#{database}-Full Database Backup', COPYONLY
     GO"
 
     expect(converge).to run_mssqlserver_sql_command('run backup script').with({ :database => 'master', :command => expected })
