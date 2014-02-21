@@ -10,14 +10,8 @@ describe 'mssqlserver_tests::backup_transaction_log' do
       node.set['database'] = 'db'
     end
   end
-
-  let(:converge) do
-    chef_run.converge(described_recipe)
-  end
-
-  let(:node) do
-    chef_run.node
-  end
+  let(:converge) { chef_run.converge(described_recipe) }
+  let(:node) { chef_run.node }
 
   it 'passes expected values' do
     expect(converge).to run_mssqlserver_backup_transaction_log(node['description']).with({
