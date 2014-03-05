@@ -3,8 +3,11 @@ require_relative('../../../../chefspec/config')
 require_relative('../../../../chefspec_extensions/automatic_resource_matcher')
 require_relative('../../../mssqlserver/libraries/sqlcmd_helper')
 require 'ostruct'
+require_relative('../../../windows/libraries/helper')
 
 describe 'mssqlserver_tests::sql_command_provider_bat' do
+  include Windows::Helper
+
   let(:chef_run) do
     ChefSpec::Runner.new(step_into: ['mssqlserver_sql_command']) do |node|
       node.set['description'] = 'restore db to script'
@@ -49,5 +52,10 @@ describe 'mssqlserver_tests::sql_command_provider_bat' do
     shell_command = helper.create_shell_command(node['script'])
 
     expect(converge).to render_file(node['batch_path']).with_content(shell_command)
+  end
+
+  it 'converts path to windows friendly path' do
+    node.set['batch_path'] = 'c:/some/thing'
+    expect(converge).to render_file(win_friendly_path(node['batch_path']))
   end
 end
