@@ -1,9 +1,9 @@
 require 'chefspec'
 require_relative('../../../../chefspec/config')
 require_relative('../../../../chefspec_extensions/automatic_resource_matcher')
+require_relative('../../../windows/libraries/helper')
 require_relative('../../../mssqlserver/libraries/sqlcmd_helper')
 require 'ostruct'
-require_relative('../../../windows/libraries/helper')
 
 describe 'mssqlserver_tests::sql_command_provider_bat' do
   include Windows::Helper
