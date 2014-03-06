@@ -1,7 +1,7 @@
 require 'chefspec'
 require_relative('../../../../chefspec/config')
 require_relative('../../../../chefspec_extensions/automatic_resource_matcher')
-require_relative('../../../windows/libraries/helper')
+require_relative('../../../windows/libraries/windows_helper')
 require_relative('../../../mssqlserver/libraries/sqlcmd_helper')
 require 'ostruct'
 
