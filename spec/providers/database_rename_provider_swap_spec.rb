@@ -2,10 +2,10 @@ require 'chefspec'
 require_relative('../../../../chefspec/config')
 require_relative('../../../../chefspec_extensions/automatic_resource_matcher')
 
-describe 'mssqlserver_tests::database_swap_provider_run' do
+describe 'mssqlserver_tests::database_rename_provider_swap' do
   default_description = 'swap names'
   let(:chef_run) do
-    ChefSpec::Runner.new(step_into: ['mssqlserver_database_swap']) do |node|
+    ChefSpec::Runner.new(step_into: ['mssqlserver_database_rename']) do |node|
       node.set['source_name'] = 'source'
       node.set['dest_name'] = 'destination'
     end
@@ -24,7 +24,7 @@ describe 'mssqlserver_tests::database_swap_provider_run' do
   end
 
   it 'passes expected values' do
-    expect(converge).to run_mssqlserver_database_swap(default_description)
+    expect(converge).to swap_mssqlserver_database_rename(default_description)
         .with({
           :source => node['source_name'],
           :destination => node['dest_name']
